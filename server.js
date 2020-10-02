@@ -7,7 +7,7 @@ const app = express();
 connectDB();
 
 //initialize middleware
-//In oreder to access req body we have to use middleware
+//In order to access req body we have to use middleware
 app.use(express.json({ extended: false }));
 //it is used to accept json data
 

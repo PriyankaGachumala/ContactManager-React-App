@@ -1,26 +1,47 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Fragment } from "react";
+//for routing, imported react-router-dom
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Navbar from "../src/components/layouts/Navbar";
+import Home from "../src/components/pages/Home";
+import About from "../src/components/pages/About";
+import Register from "../src/components/auth/Register";
+import Login from "../src/components/auth/Login";
+import Alerts from "../src/components/layouts/Alerts";
+import PrivateRoute from "./components/routing/PrivateRoute";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import ContactState from "./context/contact/ContactState";
+import AuthState from "./context/auth/AuthState";
+import AlertState from "./context/alert/AlertState";
+import setAuthToken from "./utils/setAuthToken";
+import "./App.css";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
 }
+
+const App = () => {
+  return (
+    <AuthState>
+      <ContactState>
+        <AlertState>
+          <Router>
+            <Fragment>
+              <Navbar />
+              <div className='container'>
+                <Alerts />
+                <Switch>
+                  <PrivateRoute exact path='/' component={Home} />
+                  <Route exact path='/about' component={About} />
+                  <Route exact path='/register' component={Register} />
+                  <Route exact path='/login' component={Login} />
+                </Switch>
+              </div>
+            </Fragment>
+          </Router>
+        </AlertState>
+      </ContactState>
+    </AuthState>
+  );
+};
 
 export default App;
